@@ -1,21 +1,66 @@
+## Complete Example: Connect and Use DockerClient
 
-# Bibliothèque Docker
+```cpp
+#include "docker/docker.h"
+#include "docker/container_manager.h"
+#include "docker/image_manager.h"
+#include "docker/network_manager.h"
 
-Cette bibliothèque C++ permet d'interagir avec Docker : gestion des conteneurs, images, réseaux et fichiers Docker Compose.
+// Docker connection configuration (default: localhost:2375)
+DockerConfig config;
+config.dockerHost = "localhost";
+config.dockerPort = 2375; // Default Docker daemon port
 
-## Structure et documentation des fichiers
+// Create Docker client
+DockerClient client(config);
 
-- `container_manager.*` : Interface principale pour créer, démarrer, arrêter et supprimer des conteneurs Docker.
-- `container.*` : Définit la structure et les méthodes d'un conteneur individuel (ID, nom, état, etc.).
-- `docker_compose_parser.*` : Parseur pour les fichiers Docker Compose (`docker-compose.yml`). Permet de charger et manipuler des stacks multi-conteneurs.
-- `docker.*` : Fonctions utilitaires pour exécuter des commandes Docker, vérifier l'état du daemon, etc.
-- `image_manager.*` : Permet de pull, build, supprimer et lister les images Docker.
-- `network_manager.*` : Création, suppression et gestion des réseaux Docker.
-- `types/` : Définitions des structures de données pour les conteneurs, images et réseaux (`container_types.h`, `image_types.h`, `network_types.h`).
+// Check connection to Docker daemon
+if (client.ping()) {
+	std::cout << "Connected to Docker!" << std::endl;
 
-## Exemples d'utilisation rapide (Client Docker)
+	// Use container manager
+	auto containerManager = client.containers();
+	auto containers = containerManager->list();
+	for (const auto& c : containers) {
+		std::cout << "Container: " << c.names[0] << " (ID: " << c.id << ")" << std::endl;
+	}
 
-### 1. Créer et démarrer un conteneur
+	// Use image manager
+	auto imageManager = client.images();
+	auto images = imageManager->list();
+	for (const auto& img : images) {
+		std::cout << "Image: " << img.repoTags[0] << std::endl;
+	}
+
+	// Use network manager
+	auto networkManager = client.networks();
+	auto networks = networkManager->list();
+	for (const auto& net : networks) {
+		std::cout << "Network: " << net.name << std::endl;
+	}
+} else {
+	std::cerr << "Unable to connect to Docker." << std::endl;
+}
+```
+
+# Docker C++ Library
+
+This C++ library allows you to interact with Docker: manage containers, images, networks, and Docker Compose files.
+
+## Structure and File Documentation
+
+- `container_manager.*`: Main interface to create, start, stop, and remove Docker containers.
+- `container.*`: Defines the structure and methods for an individual container (ID, name, state, etc.).
+- `docker_compose_parser.*`: Parser for Docker Compose files (`docker-compose.yml`). Allows loading and manipulating multi-container stacks.
+- `docker.*`: Utility functions to execute Docker commands, check daemon status, etc.
+- `image_manager.*`: Pull, build, remove, and list Docker images.
+- `network_manager.*`: Create, remove, and manage Docker networks.
+- `types/`: Data structures for containers, images, and networks (`container_types.h`, `image_types.h`, `network_types.h`).
+
+## Quick Usage Examples (Docker Client)
+
+### 1. Create and Start a Container
+
 ```cpp
 #include "docker/container_manager.h"
 
@@ -24,7 +69,8 @@ manager.createContainer("nginx", "nginx:latest");
 manager.startContainer("nginx");
 ```
 
-### 2. Lister les conteneurs
+### 2. List Containers
+
 ```cpp
 #include "docker/container_manager.h"
 
@@ -35,7 +81,8 @@ for (const auto& c : containers) {
 }
 ```
 
-### 3. Puller une image Docker
+### 3. Pull a Docker Image
+
 ```cpp
 #include "docker/image_manager.h"
 
@@ -43,15 +90,17 @@ ImageManager imgManager;
 imgManager.pullImage("ubuntu:latest");
 ```
 
-### 4. Créer un réseau Docker
+### 4. Create a Docker Network
+
 ```cpp
 #include "docker/network_manager.h"
 
 NetworkManager netManager;
-netManager.createNetwork("mon_reseau");
+netManager.createNetwork("my_network");
 ```
 
-### 5. Charger un fichier Docker Compose
+### 5. Load a Docker Compose File
+
 ```cpp
 #include "docker/docker_compose_parser.h"
 
@@ -60,15 +109,60 @@ parser.load("./docker-compose.yml");
 auto services = parser.getServices();
 ```
 
-## Dépendances
+## Complete Example: Connect and Use DockerClient
 
-- Docker doit être installé et accessible via la ligne de commande.
-- C++17 ou supérieur.
+```cpp
+#include "docker/docker.h"
+#include "docker/container_manager.h"
+#include "docker/image_manager.h"
+#include "docker/network_manager.h"
+
+// Docker connection configuration (default: localhost:2375)
+DockerConfig config;
+config.dockerHost = "localhost";
+config.dockerPort = 2375; // Default Docker daemon port
+
+// Create Docker client
+DockerClient client(config);
+
+// Check connection to Docker daemon
+if (client.ping()) {
+	std::cout << "Connected to Docker!" << std::endl;
+
+	// Use container manager
+	auto containerManager = client.containers();
+	auto containers = containerManager->list();
+	for (const auto& c : containers) {
+		std::cout << "Container: " << c.names[0] << " (ID: " << c.id << ")" << std::endl;
+	}
+
+	// Use image manager
+	auto imageManager = client.images();
+	auto images = imageManager->list();
+	for (const auto& img : images) {
+		std::cout << "Image: " << img.repoTags[0] << std::endl;
+	}
+
+	// Use network manager
+	auto networkManager = client.networks();
+	auto networks = networkManager->list();
+	for (const auto& net : networks) {
+		std::cout << "Network: " << net.name << std::endl;
+	}
+} else {
+	std::cerr << "Unable to connect to Docker." << std::endl;
+}
+```
+
+## Dependencies
+
+- Docker must be installed and accessible via the command line.
+- C++17 or higher.
 
 ## Contribution
 
-Les contributions sont les bienvenues ! Ouvrez une issue ou une pull request pour toute amélioration ou correction.
+Contributions are welcome! Please open an issue or pull request for improvements or bug fixes.
 
-## Licence
+## License
 
-Ce module suit la licence du projet Kernel-James.
+This module follows the Kernel-James project license.
