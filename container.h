@@ -59,30 +59,31 @@ public:
 		void followLogsAsync(std::function<void(const std::string &)> callback, int maxDuration = 0);
 
 		// Getters
-		[[nodiscard]] std::string getId() const { return id; }
-		[[nodiscard]] std::string getName() const { return name; }
-		[[nodiscard]] std::string getImage() const { return image; }
-		[[nodiscard]] containerTypes::ContainerState getState() const { return state; }
-		[[nodiscard]] std::string getCreated() const { return created; }
-		[[nodiscard]] std::string getDriver() const { return driver; }
+		// Getters (optimized, concise, const refs)
+		[[nodiscard]] const std::string& getId() const { return id; }
+		[[nodiscard]] const std::string& getName() const { return name; }
+		[[nodiscard]] const std::string& getImage() const { return image; }
+		[[nodiscard]] const std::string& getCreated() const { return created; }
+		[[nodiscard]] const std::string& getDriver() const { return driver; }
+		[[nodiscard]] const std::string& getAppArmorProfile() const { return appArmorProfile; }
+		[[nodiscard]] const std::string& getLogPath() const { return logPath; }
+		[[nodiscard]] const std::string& getMountLabel() const { return mountLabel; }
+		[[nodiscard]] const std::string& getPath() const { return path; }
+		[[nodiscard]] const std::string& getPlatform() const { return platform; }
+		[[nodiscard]] const std::string& getProcessLabel() const { return processLabel; }
+		[[nodiscard]] const std::string& getHostnamePath() const { return hostnamePath; }
+		[[nodiscard]] const std::string& getHostsPath() const { return hostsPath; }
+		[[nodiscard]] const std::string& getResolvConfPath() const { return resolvConfPath; }
 		[[nodiscard]] int getRestartCount() const { return restartCount; }
-		[[nodiscard]] std::string getAppArmorProfile() const { return appArmorProfile; }
-		[[nodiscard]] std::string getLogPath() const { return logPath; }
-		[[nodiscard]] std::string getMountLabel() const { return mountLabel; }
-		[[nodiscard]] std::string getPath() const { return path; }
-		[[nodiscard]] std::string getPlatform() const { return platform; }
-		[[nodiscard]] std::string getProcessLabel() const { return processLabel; }
-		[[nodiscard]] std::string getHostnamePath() const { return hostnamePath; }
-		[[nodiscard]] std::string getHostsPath() const { return hostsPath; }
-		[[nodiscard]] std::string getResolvConfPath() const { return resolvConfPath; }
-		[[nodiscard]] const std::vector<containerTypes::Mount> &getMounts() const { return mounts; }
-		[[nodiscard]] const containerTypes::GraphDriver &getGraphDriver() const { return graphDriver; }
-		[[nodiscard]] const containerTypes::HostConfig &getHostConfig() const { return hostConfig; }
-		[[nodiscard]] const containerTypes::NetworkSettings &getNetworkSettings() const { return networkSettings; }
-		[[nodiscard]] const std::vector<std::string> &getArgs() const { return args; }
-		[[nodiscard]] const std::vector<std::string> &getExecIDs() const { return execIDs; }
-		[[nodiscard]] const containerTypes::ImageManifestDescriptor &getImageManifestDescriptor() const { return imageManifestDescriptor; }
-		[[nodiscard]] const containerTypes::ContainerConfig &getConfig() const { return config; }
+		[[nodiscard]] containerTypes::ContainerState getState() const { return state; }
+		[[nodiscard]] const std::vector<containerTypes::Mount>& getMounts() const { return mounts; }
+		[[nodiscard]] const containerTypes::GraphDriver& getGraphDriver() const { return graphDriver; }
+		[[nodiscard]] const containerTypes::HostConfig& getHostConfig() const { return hostConfig; }
+		[[nodiscard]] const containerTypes::NetworkSettings& getNetworkSettings() const { return networkSettings; }
+		[[nodiscard]] const std::vector<std::string>& getArgs() const { return args; }
+		[[nodiscard]] const std::vector<std::string>& getExecIDs() const { return execIDs; }
+		[[nodiscard]] const containerTypes::ImageManifestDescriptor& getImageManifestDescriptor() const { return imageManifestDescriptor; }
+		[[nodiscard]] const containerTypes::ContainerConfig& getConfig() const { return config; }
 
 		// Methods
 		void run();
